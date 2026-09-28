@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Netshot · Network configuration and compliance management</title>
+  <meta name="description" content="Netshot is a free, open-source configuration and compliance management tool for network devices: configuration backup and history, inventory, software, hardware and configuration compliance, scripted changes and a REST API.">
+  <link rel="canonical" href="https://www.netshot.net/">
+  <meta name="theme-color" content="#0A1F15">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Netshot">
+  <meta property="og:title" content="Netshot · Network configuration and compliance management">
+  <meta property="og:description" content="Free and open-source configuration backup, inventory and compliance for network devices. Self-hosted, no feature paywall.">
+  <meta property="og:url" content="https://www.netshot.net/">
+  <meta property="og:image" content="https://www.netshot.net/assets/img/device.webp">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="assets/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+
+<!-- Lucide icons (same set as the Netshot web UI), used via <use href="#i-…"> -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol>
+    <symbol id="i-network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-calendar-clock" viewBox="0 0 24 24"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></symbol>
+    <symbol id="i-file-check" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+    <symbol id="i-server-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M4.5 10H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-.5"/><path d="M4.5 14H4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-.5"/><path d="M6 6h.01"/><path d="M6 18h.01"/><path d="m15.7 13.4-.9-.3"/><path d="m9.2 10.9-.9-.3"/><path d="m10.6 15.7.3-.9"/><path d="m13.6 15.7-.4-1"/><path d="m10.8 9.3-.4-1"/><path d="m8.3 13.6 1-.4"/><path d="m14.7 10.8 1-.4"/><path d="m13.4 8.3-.3.9"/></symbol>
+    <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-life-buoy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  </defs>
+</svg>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a class="brand" href="#top" aria-label="Netshot home">
+      <img src="assets/netshot-dark.svg" alt="Netshot" width="119" height="33">
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Main">
+      <a href="#features">Features</a>
+      <a href="#devices">Devices</a>
+      <a href="#get-started">Get started</a>
+      <a href="#open-source">Open source &amp; support</a>
+      <a href="https://docs.netshot.net/">Docs</a>
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-ghost-dark btn-sm" href="https://github.com/netshot-net/Netshot">
+        <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+        <span>GitHub</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu">
+        <svg class="icon icon-open" aria-hidden="true"><use href="#i-menu"/></svg>
+        <svg class="icon icon-close" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow eyebrow-dark">
+        <svg class="icon" aria-hidden="true"><use href="#i-shield-check"/></svg>
+        Free &amp; open source · GPL-3.0 · Self-hosted
+      </p>
+      <h1>Configuration and compliance management for network devices</h1>
+      <p class="lead">
+        Netshot backs up your device configurations, keeps an inventory of your network,
+        and continuously checks your devices against software, hardware and configuration policies.
+        Open source, self-hosted, and free for networks of any size.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary btn-lg" href="https://docs.netshot.net/latest/installation/docker/">
+          <svg class="icon" aria-hidden="true"><use href="#i-rocket"/></svg>
+          Get started
+        </a>
+        <a class="btn btn-ghost-dark btn-lg" href="https://github.com/netshot-net/Netshot">
+          <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+    <div class="hero-shot-wrap">
+      <div class="container hero-shot">
+        <figure class="shot shot-hero">
+          <img src="assets/img/device.webp" width="1600" height="1000"
+               alt="Netshot web interface showing the device list and the details of a Cisco router: management IP, location, family, software version and serial number.">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="section" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Features</p>
+        <h2 id="features-title">Everything you need to know about your network</h2>
+        <p class="section-lead">
+          Netshot connects to your devices over SSH, Telnet, SNMP or HTTP(S), snapshots them on a schedule
+          or on configuration change, and turns what it collects into an inventory, a history
+          and compliance reports.
+        </p>
+      </header>
+
+      <ul class="feature-grid">
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-history"/></svg></span>
+          <h3>Configuration backup &amp; history</h3>
+          <p>Automatic snapshots of running configurations, with full history and side-by-side diffs between any two versions.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-network"/></svg></span>
+          <h3>Network inventory</h3>
+          <p>Up-to-date inventory of devices, modules, interfaces, serial numbers, and the IP and MAC addresses in use across your network.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg></span>
+          <h3>Software compliance</h3>
+          <p>Rank software versions per platform (Gold, Silver, Bronze) and instantly spot devices running unapproved releases.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar-clock"/></svg></span>
+          <h3>Hardware support status</h3>
+          <p>Track end-of-sale and end-of-life milestones so hardware renewals never come as a surprise.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-file-check"/></svg></span>
+          <h3>Configuration compliance</h3>
+          <p>Check configurations against best-practice or custom policies, with text-based rules or JavaScript and Python scripts.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-terminal"/></svg></span>
+          <h3>Diagnostics &amp; change automation</h3>
+          <p>Run scripted diagnostics to collect operational data, and push scripted changes to one device or a whole group.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-plug"/></svg></span>
+          <h3>REST API &amp; webhooks</h3>
+          <p>Everything in the web UI is available through the REST API. Webhooks notify your other tools when things happen.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-key"/></svg></span>
+          <h3>Flexible authentication</h3>
+          <p>Local accounts, RADIUS, TACACS+, or Single Sign-On through any OIDC identity provider, with role-based permissions.</p>
+        </li>
+        <li class="feature">
+          <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-server-cog"/></svg></span>
+          <h3>Clustering &amp; high availability</h3>
+          <p>Run several Netshot nodes to spread the load and keep the service up, from a single site to large networks.</p>
+        </li>
+      </ul>
+
+      <!-- Showcase rows -->
+      <div class="showcase">
+        <div class="showcase-text">
+          <p class="eyebrow">Configuration history</p>
+          <h3>See exactly what changed, and when</h3>
+          <p>
+            Every snapshot is kept. Pick any two versions of a device's configuration and Netshot shows
+            you the differences line by line, so you can trace changes, review work, or find what broke.
+          </p>
+          <ul class="checklist">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Scheduled and change-triggered snapshots (syslog and SNMP traps)</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Running configuration plus driver-specific attributes</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Configuration change reports across the whole network</li>
+          </ul>
+        </div>
+        <figure class="shot">
+          <img src="assets/img/diff.webp" width="1600" height="981" loading="lazy"
+               alt="Side-by-side comparison of two versions of a Cisco router running configuration, with the changed SNMP location line highlighted.">
+        </figure>
+      </div>
+
+      <div class="showcase showcase-reverse">
+        <div class="showcase-text">
+          <p class="eyebrow">Compliance</p>
+          <h3>Know which devices don't follow the rules</h3>
+          <p>
+            Group devices statically or with dynamic queries, attach policies to groups, and let Netshot check
+            every new snapshot. Software, hardware and configuration compliance are summarized for each device.
+          </p>
+          <ul class="checklist">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Text rules with regular expressions and context blocks</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>JavaScript and Python rules for complex logic</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Per-rule exemptions and exportable reports</li>
+          </ul>
+        </div>
+        <figure class="shot">
+          <img src="assets/img/compliance.webp" width="1400" height="1041" loading="lazy"
+               alt="Compliance tab of a device in Netshot, showing non-compliant software, an end-of-sale warning, and a table of configuration rules with conforming and non-conforming results.">
+        </figure>
+      </div>
+
+      <div class="showcase">
+        <div class="showcase-text">
+          <p class="eyebrow">Lifecycle</p>
+          <h3>Plan hardware renewals ahead of time</h3>
+          <p>
+            Define end-of-sale and end-of-life dates per platform or part number, and see how many devices reach
+            each milestone over the coming years.
+          </p>
+          <ul class="checklist">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Timeline of devices reaching end of sale and end of life</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Rules matched on family or part number, with regular expressions</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Data export for your asset management</li>
+          </ul>
+        </div>
+        <figure class="shot">
+          <img src="assets/img/lifecycle.webp" width="1400" height="933" loading="lazy"
+               alt="Hardware support compliance report in Netshot, with a chart of devices reaching end of sale and end of life over time, and a table of milestones.">
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DEVICES ============ -->
+  <section class="section section-alt" id="devices" aria-labelledby="devices-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow">Supported devices</p>
+        <h2 id="devices-title">Works with the network you already have</h2>
+        <p class="section-lead">
+          Netshot ships with over 40 drivers for widely deployed network, security and infrastructure platforms.
+          Here are some of them.
+        </p>
+      </header>
+
+      <ul class="vendor-grid">
+        <li class="vendor">
+          <h3>Cisco</h3>
+          <p>IOS &amp; IOS-XE · NX-OS · IOS-XR · ASA · Catalyst SD-WAN · Firepower MC · AireOS</p>
+        </li>
+        <li class="vendor">
+          <h3>Juniper</h3>
+          <p>Junos · ScreenOS</p>
+        </li>
+        <li class="vendor">
+          <h3>Arista</h3>
+          <p>EOS</p>
+        </li>
+        <li class="vendor">
+          <h3>Fortinet</h3>
+          <p>FortiOS · FortiManager · FortiMail</p>
+        </li>
+        <li class="vendor">
+          <h3>Palo Alto Networks</h3>
+          <p>PAN-OS</p>
+        </li>
+        <li class="vendor">
+          <h3>F5</h3>
+          <p>BIG-IP TM-OS</p>
+        </li>
+        <li class="vendor">
+          <h3>Check Point</h3>
+          <p>Gaia</p>
+        </li>
+        <li class="vendor">
+          <h3>HPE Aruba</h3>
+          <p>AOS-CX · ArubaOS-Switch · Comware</p>
+        </li>
+        <li class="vendor">
+          <h3>Huawei</h3>
+          <p>NE series routers</p>
+        </li>
+        <li class="vendor">
+          <h3>Nokia (Alcatel-Lucent)</h3>
+          <p>TiMOS</p>
+        </li>
+        <li class="vendor">
+          <h3>Citrix</h3>
+          <p>NetScaler · NetScaler SDX</p>
+        </li>
+        <li class="vendor">
+          <h3>Any SNMP device</h3>
+          <p>Generic SNMP driver for basic inventory</p>
+        </li>
+      </ul>
+
+      <div class="drivers-note">
+        <div class="drivers-note-icon"><svg class="icon" aria-hidden="true"><use href="#i-puzzle"/></svg></div>
+        <div>
+          <h3>Missing a platform? Write a driver.</h3>
+          <p>
+            A Netshot driver is a single JavaScript file that tells Netshot how to talk to a device and what to collect.
+            You can add or override drivers without rebuilding anything.
+          </p>
+          <p class="link-row">
+            <a class="link" href="https://github.com/netshot-net/Netshot/tree/master/src/main/resources/drivers">Browse all bundled drivers <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+            <a class="link" href="https://docs.netshot.net/latest/extending/writing-a-driver/">Writing a new driver <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GET STARTED ============ -->
+  <section class="section" id="get-started" aria-labelledby="start-title">
+    <div class="container start-grid">
+      <div>
+        <p class="eyebrow">Get started</p>
+        <h2 id="start-title">Up and running in two commands</h2>
+        <p class="section-lead">
+          The quickest way to try Netshot is Docker Compose: it starts Netshot, its PostgreSQL database
+          and a reverse proxy in one go.
+        </p>
+        <p>
+          Then open <code>https://&lt;your-server&gt;/</code> and log in with <code>admin</code> / <code>netshot</code>.
+          Change that password straight away.
+        </p>
+        <div class="start-links">
+          <a class="btn btn-primary" href="https://docs.netshot.net/latest/installation/docker/">
+            <svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>
+            Docker install guide
+          </a>
+          <a class="btn btn-outline" href="https://docs.netshot.net/latest/installation/linux/">
+            Install on a Linux server
+          </a>
+        </div>
+        <p class="small">
+          Full documentation, including the user guide, configuration reference and REST API, is at
+          <a class="link" href="https://docs.netshot.net/">docs.netshot.net</a>.
+        </p>
+      </div>
+
+      <div class="terminal" role="group" aria-label="Quick install commands">
+        <div class="terminal-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="terminal-title">bash</span>
+          <button class="copy-btn" type="button" data-copy-target="install-cmds" aria-label="Copy commands">
+            <svg class="icon icon-copy" aria-hidden="true"><use href="#i-copy"/></svg>
+            <svg class="icon icon-done" aria-hidden="true"><use href="#i-check"/></svg>
+            <span class="copy-label">Copy</span>
+          </button>
+        </div>
+<pre id="install-cmds"><code><span class="prompt" aria-hidden="true">$ </span>wget https://raw.githubusercontent.com/netshot-net/Netshot/master/dist/compose.yaml
+<span class="prompt" aria-hidden="true">$ </span>docker compose up -d</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OPEN SOURCE & SUPPORT ============ -->
+  <section class="section section-dark" id="open-source" aria-labelledby="oss-title">
+    <div class="container">
+      <div class="oss-grid">
+        <div class="oss-text">
+          <p class="eyebrow eyebrow-dark">Open source</p>
+          <h2 id="oss-title">Free. Open source. No strings attached.</h2>
+          <p class="lead">
+            Netshot is released under the GPL-3.0 license and runs on your own infrastructure.
+            There's no enterprise edition, no device limit, and no feature kept behind a paywall.
+            You get the whole product.
+          </p>
+          <p class="pledge">
+            <svg class="icon" aria-hidden="true"><use href="#i-shield-check"/></svg>
+            <span>Netshot stays fully open source and self-hosted.<br><strong>Paid services buy support, not features.</strong></span>
+          </p>
+          <ul class="oss-points">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>Source code on GitHub, contributions welcome</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-server-cog"/></svg>Your data stays on your servers</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Every feature in every install</li>
+          </ul>
+        </div>
+
+        <div class="support-card">
+          <div class="support-head">
+            <span class="feature-icon"><svg class="icon" aria-hidden="true"><use href="#i-life-buoy"/></svg></span>
+            <h3>Professional services</h3>
+          </div>
+          <p>Need help running Netshot at scale, or a feature that matters to your team? The people behind Netshot can help.</p>
+          <ul class="support-list">
+            <li>
+              <strong>Support contracts</strong>
+              <span>Direct access to the Netshot team when you need it.</span>
+            </li>
+            <li>
+              <strong>Installation &amp; onboarding</strong>
+              <span>Deployment, upgrades and migration assistance.</span>
+            </li>
+            <li>
+              <strong>Custom driver development</strong>
+              <span>Support for platforms that aren't covered yet, or tuning existing drivers.</span>
+            </li>
+            <li>
+              <strong>Custom features &amp; integrations</strong>
+              <span>Sponsored development and integration with your other tools.</span>
+            </li>
+          </ul>
+          <a class="btn btn-primary btn-block" href="mailto:contact@netshot.net">
+            <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>
+            contact@netshot.net
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <img src="assets/netshot-light.svg" alt="Netshot" width="104" height="29">
+      <p>Configuration and compliance management for network devices.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <div>
+        <h3>Project</h3>
+        <a href="https://github.com/netshot-net/Netshot">GitHub</a>
+        <a href="https://github.com/netshot-net/Netshot/releases">Releases</a>
+        <a href="https://github.com/netshot-net/Netshot/issues">Issues</a>
+      </div>
+      <div>
+        <h3>Documentation</h3>
+        <a href="https://docs.netshot.net/">Docs</a>
+        <a href="https://docs.netshot.net/latest/installation/docker/">Installation</a>
+        <a href="https://docs.netshot.net/latest/api/rest-api/">REST API</a>
+      </div>
+      <div>
+        <h3>Community</h3>
+        <a href="https://github.com/scaleway/netbox2netshot">netbox2netshot</a>
+        <a href="mailto:contact@netshot.net">contact@netshot.net</a>
+      </div>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <p>Netshot is free software, released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU GPL v3</a>.</p>
+  </div>
+</footer>
+
+</body>
+</html>
